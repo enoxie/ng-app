@@ -1,0 +1,92 @@
+<h3>Product Create</h3>
+{{ model | json }}
+<form class="w-50" #form="ngForm" (ngSubmit)="createProduct(form)">
+  <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+  <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input
+      #name="ngModel"
+      required
+      minlength="5"
+      [(ngModel)]="model.name"
+      type="text"
+      name="name"
+      id="name"
+      class="form-control"
+      autocomplete="off"
+    />
+
+    <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
+      Ürün ismi en az 5 karakter olmalıdır.
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="price" class="form-label">Price</label>
+    <input
+      required
+      #price="ngModel"
+      min="0"
+      max="100000"
+      [(ngModel)]="model.price"
+      type="number"
+      name="price"
+      id="price"
+      class="form-control"
+      autocomplete="off"
+    />
+    <div class="text-danger mt-1" *ngIf="price.invalid && price.touched">
+      Lütfen geçerli ürün fiyatı giriniz.
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="imageUrl" class="form-label">Image URL</label>
+    <input
+      [(ngModel)]="model.imageUrl"
+      type="imageUrl"
+      name="imageUrl"
+      id="imageUrl"
+      class="form-control"
+      autocomplete="off"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <ckeditor
+      name="description"
+      id="description"
+      [(ngModel)]="model.description"
+    ></ckeditor>
+  </div>
+  <div class="form-check mb-3">
+    <input
+      [(ngModel)]="model.isActive"
+      class="form-check-input"
+      type="checkbox"
+      name="isActive"
+      id="flexCheckDefault"
+    />
+    <label class="form-check-label" for="flexCheckDefault"> IsActive? </label>
+  </div>
+
+  <div class="mb-3">
+    <label for="categoryId" class="form-label">Category</label>
+    <select
+      name="categoryId"
+      id="categoryId"
+      class="form-select"
+      [(ngModel)]="model.categoryId"
+    >
+      <option value="0">Kategori</option>
+
+      <option *ngFor="let item of categories" value="{{ item.id }}">
+        {{ item.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      Create Product
+    </button>
+  </div>
+</form>

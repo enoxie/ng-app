@@ -1,0 +1,57 @@
+<div class="auth-container">
+  <div class="alert alert-danger" *ngIf="error">
+    {{ error }}
+  </div>
+  <div class="alert alert-success" *ngIf="user">
+    {{ user }}
+  </div>
+  <div class="auth-header mb-4">
+    <h3>{{ isLoginMode ? "Giriş Yap" : "Hesap Oluştur" }}</h3>
+  </div>
+  <form #form="ngForm" class="auth-form" (ngSubmit)="handleForm(form)">
+    <div class="mb-3">
+      <label for="email" class="form-label">E-Mail</label>
+      <input
+        type="email"
+        required
+        email
+        ngModel
+        name="email"
+        class="form-control w-50"
+        id="email"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        required
+        minlength="6"
+        ngModel
+        name="password"
+        class="form-control w-50"
+        id="password"
+      />
+    </div>
+    <div class="button-group d-flex w-50">
+      <button
+        class="btn btn-primary form-control me-4"
+        [disabled]="form.invalid"
+        type="submit"
+      >
+        {{ isLoginMode ? "Giriş Yap" : "Kayıt Ol" }}
+      </button>
+      <button
+        class="btn btn-outline-primary form-control"
+        (click)="toggleButton()"
+        type="button"
+      >
+        {{ isLoginMode ? "Hesap Oluştur" : "Zaten bir hesabım var" }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="spinner-border mt-4" role="status" *ngIf="loading">
+  <span class="sr-only"></span>
+</div>
