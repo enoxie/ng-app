@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IProduct } from '../models/product.model';
 import { Observable, delay, exhaustMap, map, take, tap } from 'rxjs';
 import { AuthService } from '../../authentication/services/auth.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/.environments/environment';
 
 @Injectable()
 export class ProductService {

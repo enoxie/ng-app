@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ICategory } from '../models/category.model';
 import { Observable, exhaustMap, map, take, tap } from 'rxjs';
 import { AuthService } from 'src/app/authentication/services/auth.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/.environments/environment';
 
 @Injectable()
 export class CategoryService {

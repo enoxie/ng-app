@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthResponse } from '../models/auth-response.model';
 import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/.environments/environment';
 
 @Injectable({
   providedIn: 'root',

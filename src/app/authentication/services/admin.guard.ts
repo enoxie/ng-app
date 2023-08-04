@@ -8,7 +8,7 @@ import {
 } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
 import { AuthService } from './auth.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/.environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AdminGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {}
