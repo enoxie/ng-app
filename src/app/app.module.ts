@@ -1,40 +1,25 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { ProductListComponent } from './product-list/product-list.component';
-import { ProductComponent } from './product-list/product/product.component';
-import { CategoryListComponent } from './category-list/category-list.component';
-
 import { AppRoutingModule } from './app-routing.module';
-import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CreateProductComponent } from './product-create/product-create.component';
-import { CreateCategoryComponent } from './category-create/category-create.component';
 import { FormsModule } from '@angular/forms';
 import { CKEditorModule } from 'ckeditor4-angular';
-import { AuthComponent } from './auth/auth.component';
-import { ObservableComponent } from './observable/observable.component';
+import { ProductsModule } from './products/products.module';
+import { CategoriesModule } from './categories/categories.module';
+import { AuthenticationModule } from './authentication/authentication.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    ProductListComponent,
-    ProductComponent,
-    CategoryListComponent,
-    HomeComponent,
-    CreateProductComponent,
-    CreateCategoryComponent,
-    AuthComponent,
-    ObservableComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    CKEditorModule,
+    CategoriesModule,
+    AuthenticationModule,
+    SharedModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

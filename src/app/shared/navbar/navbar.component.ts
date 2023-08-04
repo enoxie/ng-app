@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../authentication/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'navbar',
@@ -8,15 +9,17 @@ import { AuthService } from '../services/auth.service';
 })
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean = false;
+  isAdmin: boolean = false;
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.authService.user.subscribe((user) => {
       this.isAuthenticated = !!user;
+      this.isAdmin = user?.email == environment.adminEmail;
     });
   }
 
   Logout() {
-    this.isAuthenticated = false;
+    this.authService.logout();
   }
 }

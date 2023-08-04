@@ -1,18 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthResponse } from '../models/authResponse.model';
-import { Subject, catchError, tap, throwError } from 'rxjs';
-import { User } from '../models/user';
+import { AuthResponse } from '../models/auth-response.model';
+import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
+import { User } from '../models/user.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiKey = 'AIzaSyAZe6Agld3PT1Ns7wBjx5A5-H909cYVFv0';
-  user = new Subject<User>();
-  private registerUrl =
-    'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' +
-    this.apiKey;
+  private apiKey = environment.apiKey;
+  user = new BehaviorSubject<User | null>(null);
+  private registerUrl = environment.signupUrl + this.apiKey;
   constructor(private http: HttpClient) {}
 
   register(email: string, password: string) {
@@ -33,9 +32,7 @@ export class AuthService {
         })
       );
   }
-  private loginUrl =
-    'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' +
-    this.apiKey;
+  private loginUrl = environment.loginUrl + this.apiKey;
   login(email: string, password: string) {
     return this.http
       .post<AuthResponse>(this.loginUrl, {
@@ -56,6 +53,10 @@ export class AuthService {
       );
   }
 
+  logout() {
+    this.user.next(null);
+    localStorage.removeItem('user');
+  }
   private handleError(err: HttpErrorResponse) {
     let message = 'Bir hata oluştu!';
     switch (err.error.error.message) {
@@ -80,6 +81,27 @@ export class AuthService {
   ) {
     const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
     const user = new User(email, localId, idToken, expirationDate);
+    console.log(user);
     this.user.next(user);
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  autoLogin() {
+    if (localStorage.getItem('user') == null) {
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    const loadedUser = new User(
+      user.email,
+      user.id,
+      user._token,
+      new Date(user._tokenExpire)
+    );
+
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+    }
   }
 }

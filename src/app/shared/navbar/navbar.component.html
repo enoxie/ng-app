@@ -27,7 +27,7 @@
           >
         </li>
 
-        <li *ngIf="isAuthenticated" class="nav-item">
+        <li *ngIf="isAdmin" class="nav-item">
           <a
             [routerLink]="['/products/create']"
             routerLinkActive="router-link-active"
@@ -35,7 +35,7 @@
             >Create Product</a
           >
         </li>
-        <li *ngIf="isAuthenticated" class="nav-item">
+        <li *ngIf="isAdmin" class="nav-item">
           <a
             [routerLink]="['/category/create']"
             routerLinkActive="router-link-active"

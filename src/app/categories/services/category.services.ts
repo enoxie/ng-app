@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ICategory } from '../models/category.model';
-import { Observable, map } from 'rxjs';
+import { Observable, exhaustMap, map, take, tap } from 'rxjs';
+import { AuthService } from 'src/app/authentication/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class CategoryService {
-  constructor(private http: HttpClient) {}
-  private url =
-    'https://ng-app-bf51f-default-rtdb.europe-west1.firebasedatabase.app/';
+  constructor(private http: HttpClient, private authService: AuthService) {}
+  private url = environment.databaseUrl;
 
   getCategories(): Observable<ICategory[]> {
     return this.http.get<ICategory[]>(this.url + 'categories.json').pipe(
@@ -23,6 +24,15 @@ export class CategoryService {
   }
 
   createCategories(category: ICategory): Observable<ICategory> {
-    return this.http.post<ICategory>(this.url + 'categories.json', category);
+    return this.authService.user.pipe(
+      take(1),
+      tap((user) => console.log(user)),
+      exhaustMap((user) => {
+        return this.http.post<ICategory>(
+          this.url + 'categories.json?auth=' + user?.token,
+          category
+        );
+      })
+    );
   }
 }

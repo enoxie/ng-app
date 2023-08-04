@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IProduct } from '../models/product.model';
-import { Observable, delay, map } from 'rxjs';
+import { Observable, delay, exhaustMap, map, take, tap } from 'rxjs';
+import { AuthService } from '../../authentication/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ProductService {
-  constructor(private http: HttpClient) {}
-  private url =
-    'https://ng-app-bf51f-default-rtdb.europe-west1.firebasedatabase.app/';
+  constructor(private http: HttpClient, private authService: AuthService) {}
+  private url = environment.databaseUrl;
 
   getProducts(categoryId: number): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(this.url + 'products.json').pipe(
@@ -35,6 +36,15 @@ export class ProductService {
   }
 
   createProduct(product: IProduct): Observable<IProduct> {
-    return this.http.post<IProduct>(this.url + 'products.json', product);
+    return this.authService.user.pipe(
+      take(1),
+      tap((user) => console.log(user)),
+      exhaustMap((user) => {
+        return this.http.post<IProduct>(
+          this.url + 'products.json?auth=' + user?.token,
+          product
+        );
+      })
+    );
   }
 }
